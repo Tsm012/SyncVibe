@@ -3,6 +3,7 @@
 
 # Add this line
 out/
+*/build
 
 CMakeLists.txt.user
 CMakeCache.txt

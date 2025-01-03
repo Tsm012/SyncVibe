@@ -13,3 +13,7 @@ project ("SyncVibe")
 
 # Include sub-projects.
 add_subdirectory ("SyncVibe")
+add_subdirectory ("CLI")
+add_subdirectory ("Renderer")
+add_subdirectory ("Network")
+
