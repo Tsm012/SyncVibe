@@ -37,8 +37,8 @@ elseif (UNIX)
     find_package(SDL3_image REQUIRED)
     
     # Include the dependencies directory in the include path
-    target_include_directories(Renderer PRIVATE ${SDL3_INCLUDE_DIRS})
-    target_include_directories(Renderer PRIVATE ${SDL3_image_INCLUDE_DIRS})
+    target_include_directories(Renderer PRIVATE ${CMAKE_SOURCE_DIR}/dependencies/SDL3_image/include)
+    target_include_directories(Renderer PRIVATE ${CMAKE_SOURCE_DIR}/dependencies/SDL3/include)
     
     # Link against SDL3 and SDL3_image using all-keyword signatures
     target_link_libraries(Renderer PRIVATE SDL3::SDL3 SDL3_image::SDL3_image)
