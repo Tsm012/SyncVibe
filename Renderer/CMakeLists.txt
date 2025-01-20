@@ -2,7 +2,7 @@
 project(SyncVibe)
 
 # Add the source to this project's executable
-add_executable(Renderer "Renderer.cpp" "Renderer.h")
+add_library(Renderer "Renderer.cpp" "Renderer.h")
 
 # Set the C++ standard if the CMake version is greater than 3.12
 if (CMAKE_VERSION VERSION_GREATER 3.12)
@@ -21,6 +21,10 @@ if (WIN32)
     # Link against SDL3 and SDL3_image using all-keyword signatures
     target_link_libraries(Renderer PRIVATE ${CMAKE_SOURCE_DIR}/dependencies/SDL3/SDL3.lib)
     target_link_libraries(Renderer PRIVATE ${CMAKE_SOURCE_DIR}/dependencies/SDL3_image/SDL3_image.lib)
+    target_link_libraries(Renderer PRIVATE Winmm.lib)
+    target_link_libraries(Renderer PRIVATE Setupapi.lib)
+    target_link_libraries(Renderer PRIVATE Version.lib)
+    target_link_libraries(Renderer PRIVATE Imm32.lib)
     
     # Add custom command to move the DLL
     add_custom_command(TARGET Renderer POST_BUILD 
