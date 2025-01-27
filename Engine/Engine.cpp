@@ -37,15 +37,10 @@ void Engine::initialize(Engine::ConnectionType connectionType, const char* host,
 		return;
 	}
 
-	if (connectionType == Client)
+	if (!ui.initialize(connectionType == Engine::Server ? "Server" : "Client"))
 	{
-		if (!ui.initialize("Client"))
-		{
-			std::cout << "Could not initialize UI" << std::endl;
-		}
+		std::cout << "Could not initialize UI" << std::endl;
 	}
-
-
 }
 void Engine::run()
 {

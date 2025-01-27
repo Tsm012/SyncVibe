@@ -19,3 +19,6 @@ if (WIN32)
                        COMMENT "Moving SDL3.dll to the output directory")
 endif()
 
+add_custom_command(TARGET Client POST_BUILD 
+                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Renderer/Player.bmp $<TARGET_FILE_DIR:Client>/Player.bmp
+                   COMMENT "Moving Player Sprite to the output directory")
