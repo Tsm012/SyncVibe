@@ -6,7 +6,7 @@ add_library(Renderer "Renderer.cpp" "Renderer.h" "Sprite.cpp" "Sprite.h")
 
 # Set the C++ standard if the CMake version is greater than 3.12
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-    set_property(TARGET Renderer PROPERTY CXX_STANDARD 20)
+    set_property(TARGET Renderer PROPERTY CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES)
 endif()
     
 target_include_directories(Renderer PUBLIC ${CMAKE_SOURCE_DIR}/dependencies/SDL3_image/include)
