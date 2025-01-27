@@ -1,123 +1,117 @@
-/*This source code copyrighted by Lazy Foo' Productions 2004-2024
-and may not be redistributed without written permission.*/
+#include "Renderer.h"
+#include "Sprite.h"
+#include <SDL_image.h> // Include SDL_image
 
-/* Headers */
-//Using SDL and STL string
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
-#include <string>
 
-/* Constants */
-//Screen dimension constants
-constexpr int kScreenWidth{ 640 };
-constexpr int kScreenHeight{ 480 };
-
-/* Function Prototypes */
-//Starts up SDL and creates window
-bool init();
-
-//Loads media
-bool loadMedia();
-
-//Frees media and shuts down SDL
-void close();
-
-/* Global Variables */
-//The window we'll be rendering to
-SDL_Window* gWindow{ nullptr };
-
-//The surface contained by the window
-SDL_Surface* gScreenSurface{ nullptr };
-
-/* Function Implementations */
-bool init()
+bool UI::initialize(std::string title)
 {
-	//Initialization flag
-	bool success{ true };
-
-	//Initialize SDL
-	if (!SDL_Init(SDL_INIT_VIDEO))
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
-		success = false;
-	}
-	else
-	{
-		//Create window
-		if (gWindow = SDL_CreateWindow("SDL3 Tutorial: Render a Square", kScreenWidth, kScreenHeight, 0); gWindow == nullptr)
-		{
-			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
-			success = false;
-		}
-		else
-		{
-			//Get window surface
-			gScreenSurface = SDL_GetWindowSurface(gWindow);
-		}
+		std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+		return false;
 	}
 
-	return success;
+	window = SDL_CreateWindow(title.c_str(), 800, 600, 0);
+	if (window == nullptr)
+	{
+		std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+		SDL_Quit();
+		return false;
+	}
+
+	renderer = SDL_CreateRenderer(window, nullptr);
+	if (renderer == nullptr)
+	{
+		std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+		SDL_DestroyWindow(window);
+		SDL_Quit();
+		return false;
+	}
+
+	// Set render draw color (white)
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+	return true;
 }
 
-void close()
+SDL_Texture* UI::loadTexture(std::string path)
 {
-	//Destroy window
-	SDL_DestroyWindow(gWindow);
-	gWindow = nullptr;
-	gScreenSurface = nullptr;
+	if (renderer == nullptr)
+	{
+		return nullptr;
+	}
 
-	//Quit SDL subsystems
+	SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
+	if (loadedSurface == nullptr)
+	{
+		std::cerr << "Unable to load image " << path << "! IMG_Error: " << SDL_GetError() << std::endl;
+		return nullptr;
+	}
+
+	// Check if the surface is valid
+	if (loadedSurface->w == 0 || loadedSurface->h == 0)
+	{
+		std::cerr << "Invalid surface dimensions!" << std::endl;
+		SDL_DestroySurface(loadedSurface);
+		return nullptr;
+	}
+
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+	SDL_DestroySurface(loadedSurface);
+
+	if (texture == nullptr)
+	{
+		std::cerr << "Unable to create texture from " << path << "! SDL_Error: " << SDL_GetError() << std::endl;
+		return nullptr;
+	}
+
+	return texture;
+}
+
+SDL_Event UI::getInput()
+{
+	while (SDL_PollEvent(&event))
+	{
+		return event;
+	}
+	return SDL_Event();
+}
+
+void UI::render(std::unordered_map<unsigned int, Sprite> players, std::unordered_map<unsigned int, Sprite> gameObjects)
+{
+	if (renderer == nullptr)
+	{
+		return;
+	}
+
+	// Clear the window
+	SDL_RenderClear(renderer);
+
+	for (std::pair<int, Sprite> object : players)
+	{
+		SDL_RenderTexture(renderer, object.second.texture, nullptr, &object.second.boundingBox);
+	}
+
+	for (std::pair<int, Sprite> object : gameObjects)
+	{
+		SDL_RenderTexture(renderer, object.second.texture, nullptr, &object.second.boundingBox);
+	}
+
+	// Update the screen
+	SDL_RenderPresent(renderer);
+}
+
+void UI::cleanup(std::unordered_map<unsigned int, Sprite> players, std::unordered_map<unsigned int, Sprite> gameObjects)
+{
+	for (std::pair<int, Sprite> object : gameObjects)
+	{
+		if (object.second.texture != nullptr)
+		{
+			SDL_DestroyTexture(object.second.texture);
+		}
+	}
+
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
-}
-
-int main(int argc, char* args[])
-{
-	//Final exit code
-	int exitCode{ 0 };
-
-	//Initialize
-	if (!init())
-	{
-		SDL_Log("Unable to initialize program!\n");
-		exitCode = 1;
-	}
-	else
-	{
-		//The quit flag
-		bool quit{ false };
-
-		//The event data
-		SDL_Event e;
-		SDL_zero(e);
-
-		//The main loop
-		while (quit == false)
-		{
-			//Get event data
-			while (SDL_PollEvent(&e))
-			{
-				//If event is quit type
-				if (e.type == SDL_EVENT_QUIT)
-				{
-					//End the main loop
-					quit = true;
-				}
-			}
-
-			//Fill the surface white
-			SDL_FillSurfaceRect(gScreenSurface, nullptr, SDL_MapSurfaceRGB(gScreenSurface, 0xFF, 0xFF, 0xFF));
-
-			//Define a red square
-			SDL_Rect fillRect = { (kScreenWidth - 200) / 2, (kScreenHeight - 200) / 2, 200, 200 };
-			SDL_FillSurfaceRect(gScreenSurface, &fillRect, SDL_MapSurfaceRGB(gScreenSurface, 0xFF, 0x00, 0x00));
-
-			//Update the surface
-			SDL_UpdateWindowSurface(gWindow);
-		}
-	}
-
-	//Clean up
-	close();
-
-	return exitCode;
 }

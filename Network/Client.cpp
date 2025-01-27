@@ -1,9 +1,9 @@
-#pragma once
 #include "Client.h"
 #include <random>
 #include <thread>
 #include <string>
 #include <Utilities.h>
+#include <string.h>
 
 
 namespace Network
@@ -85,5 +85,6 @@ namespace Network
 				}
 			}
 		}
+		return -1;
 	}
 }

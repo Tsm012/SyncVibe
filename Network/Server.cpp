@@ -1,4 +1,3 @@
-#pragma once
 #include "Server.h"
 #include <iostream>
 #include <stdexcept> 

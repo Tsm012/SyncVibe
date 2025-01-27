@@ -1,4 +1,3 @@
-#pragma once
 #include "Message.h"
 
 Network::Message::Message()

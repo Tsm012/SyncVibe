@@ -3,7 +3,7 @@
 #include <mutex>
 #include <optional>
 #include <vector>
-#include <enet.h>
+#include <enet/enet.h>
 #include <map>
 #include <iostream>
 #include "Message.h" 

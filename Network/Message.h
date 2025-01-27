@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <types.h>
+#include <enet/types.h>
 
 namespace Network
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include <enet.h>
+#include <enet/enet.h>
 #include "ThreadSafeByteChannel.h"
 #include "Message.h"
 

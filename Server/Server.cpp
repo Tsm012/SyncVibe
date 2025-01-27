@@ -1,9 +1,14 @@
+#include <Engine.h>
+#include <Utilities.h>
 
-#include "Server.h"
-using namespace std;
+#include <thread>
+#include <map>
 
-int main()
+int main(int argc, char* argv[])
 {
-	cout << "Hello Cli." << endl;
+	std::map<std::string, std::string> args =
+		parseCommandLineArguments(argc, argv);
+
+	Engine().run();
 	return 0;
 }
