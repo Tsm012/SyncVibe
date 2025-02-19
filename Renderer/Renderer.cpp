@@ -3,7 +3,7 @@
 #include <SDL_image.h> // Include SDL_image
 
 
-bool UI::initialize(std::string title)
+bool Renderer::initialize(std::string title)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -34,7 +34,7 @@ bool UI::initialize(std::string title)
 	return true;
 }
 
-SDL_Texture* UI::loadTexture(std::string path)
+SDL_Texture* Renderer::loadTexture(std::string path)
 {
 	if (renderer == nullptr)
 	{
@@ -68,7 +68,7 @@ SDL_Texture* UI::loadTexture(std::string path)
 	return texture;
 }
 
-SDL_Event UI::getInput()
+SDL_Event Renderer::getInput()
 {
 	while (SDL_PollEvent(&event))
 	{
@@ -77,7 +77,7 @@ SDL_Event UI::getInput()
 	return SDL_Event();
 }
 
-void UI::render(std::unordered_map<unsigned int, Sprite> players, std::unordered_map<unsigned int, Sprite> gameObjects)
+void Renderer::render(std::unordered_map<unsigned int, Sprite> players, std::unordered_map<unsigned int, Sprite> gameObjects)
 {
 	if (renderer == nullptr)
 	{
@@ -101,7 +101,7 @@ void UI::render(std::unordered_map<unsigned int, Sprite> players, std::unordered
 	SDL_RenderPresent(renderer);
 }
 
-void UI::cleanup(std::unordered_map<unsigned int, Sprite> players, std::unordered_map<unsigned int, Sprite> gameObjects)
+void Renderer::cleanup(std::unordered_map<unsigned int, Sprite> players, std::unordered_map<unsigned int, Sprite> gameObjects)
 {
 	for (std::pair<int, Sprite> object : gameObjects)
 	{

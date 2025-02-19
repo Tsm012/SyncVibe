@@ -4,7 +4,7 @@
 #include "Sprite.h"
 #include <unordered_map>
 
-class UI
+class Renderer
 {
 public:
 	bool initialize(std::string title);

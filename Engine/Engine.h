@@ -35,7 +35,7 @@ private:
 	Sprite deserializeGameObject(std::vector<unsigned char> serializedGameObject);
 	std::vector<unsigned char> serializeGameObjects(const std::unordered_map<unsigned int, Sprite>& gameObjects);
 	std::unordered_map<unsigned int, Sprite> deserializeGameObjects(const std::vector<unsigned char>& serializedGameObjects);
-	UI ui;
+	Renderer ui;
 	ConnectionType connectionType;
 	NetworkConnection* connection;
 	const char* host;
