@@ -5,6 +5,7 @@
 #include <Utilities.h>
 #include <Client.h>
 #include <Server.h>
+#include <Sqlite3.h>
 #include <unordered_map>
 
 class Engine

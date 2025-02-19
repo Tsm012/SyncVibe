@@ -6,6 +6,8 @@
 
 Engine::Engine() : connectionType(Server), host("localhost"), port(2000)
 {
+	sqlite3* DB = nullptr;
+	std::cout << "Server" << std::endl;
 	initialize(connectionType, host, port);
 	auto texture = ui.loadTexture("Player.bmp");
 	playerId = generateRandomId();
